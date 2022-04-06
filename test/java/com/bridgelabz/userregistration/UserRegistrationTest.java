@@ -2,72 +2,44 @@ package com.bridgelabz.userregistration;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.Assert;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+
+import java.util.Arrays;
+import java.util.Collection;
+import static org.junit.Assert.assertEquals;
+@RunWith(Parameterized.class)
 
 public class UserRegistrationTest
 {
+    private String emailTest;
+    private boolean expectedResult;
+    private UserRegistration validateEmail;
+
+    public UserRegistrationTest(String email, boolean expectedResult) {
+        this.emailTest = email;
+        this.expectedResult = expectedResult;
+    }
+
     @Before
-    public void setup() {
-        UserRegistration userRegistration=new UserRegistration();
-    }
-    //positive test case  for userName return->true
-    @Test
-    public void givenFirstName_WhenFirstNameCapital_ShouldReturnTrue() {
-        UserRegistration userRegistration=new UserRegistration();
-        boolean actual=userRegistration.validateUsername("Arun");
-
-        Assert.assertTrue(actual);
-    }
-    //negative test case for userName return->false
-    @Test
-    public void givenFirstName_WhenFirstNameCapital_ShouldReturnFalse() {
-        UserRegistration userRegistration=new UserRegistration();
-        boolean actual=userRegistration.validateUsername("abc");
-        Assert.assertFalse(actual);
+    public void initialize() {
+        validateEmail = new UserRegistration();
     }
 
-    //positive test case for LastName return->true
-    @Test
-    public void givenLastName_WhenLastNameCapital_ShouldReturnTrue() {
-        UserRegistration userRegistration=new UserRegistration();
-        boolean actual=userRegistration.validateLastname("Abcd");
-        Assert.assertTrue(actual);
-    }
-    //negative test case for userName return->false
-    @Test
-    public void givenlastName_WhenlastNameCapital_ShouldReturnFalse() {
-        UserRegistration userRegistration=new UserRegistration();
-        boolean actual=userRegistration.validateLastname("abcd");
-        Assert.assertFalse(actual);
+    @Parameterized.Parameters
+    public static Collection data() {
+        return Arrays.asList(new Object[][] { { "abc@yahoo.com", true }, { "abc-100@yahoo.com", true },
+                { "abc.100@yahoo.com", true }, { "abc111@abc.com", true }, { "abc-100@abc.net", true },
+                { "abc.100@abc.com.au", true }, { "abc@1.com", true }, { "abc@gmail.com.com", true },
+                { "abc+100@gmail.com", true }, { "abc", false }, { "abc@.com.my", false }, { "abc123@gmail.a", false },
+                { "abc123@.com", false }, { "abc123@.com.com", false }, { ".abc@abc.com", false },
+                { "abc()*@gmail.com", false }, { "abc@%*.com", false }, { "abc..2002@gmail.com", false },
+                { "abc.@gmail.com", false }, { "abc@abc@gmail.com", false }, { "abc@gmail.com.1a", false },
+                { "abc@gmail.com.aa.au", false } });
     }
 
-    //positive test case for PhoneNo return->true
     @Test
-    public void givenphoneNo_WhenPhoneNoTendigit_ShouldReturnTrue() {
-        UserRegistration userRegistration=new UserRegistration();
-        boolean actual=userRegistration.validateMobileNo("917894567456");
-        Assert.assertTrue(actual);
-    }
-    //negative test case for PhoneNo return->false
-    @Test
-    public void givenPhoneNo_WhenPhoneNoTendigit_Capital_ShouldReturnFalse() {
-        UserRegistration userRegistration=new UserRegistration();
-        boolean actual=userRegistration.validateMobileNo("4785748596");
-        Assert.assertFalse(actual);
-    }
-
-    //positive test case for PhoneNo return->true
-    @Test
-    public void givenPassword_WhenPasswordCondition_ShouldReturnTrue() {
-        UserRegistration userRegistration=new UserRegistration();
-        boolean actual=userRegistration.validatePassword("Arunavv@1");
-        Assert.assertTrue(actual);
-    }
-    //negative test case for PhoneNo return->false
-    @Test
-    public void givenPhoneNo_WhenPasswordCondition_Capital_ShouldReturnFalse() {
-        UserRegistration userRegistration=new UserRegistration();
-        boolean actual=userRegistration.validatePassword("Arung");
-        Assert.assertFalse(actual);
+    public void givenEmailAsVar_ShouldReturnTrueorFalse() {
+        assertEquals(expectedResult, validateEmail.validateEmail(emailTest));
     }
 }
